@@ -22,10 +22,10 @@ class BracketsUITests: XCTestCase {
 	}
 	
 	// MARK: - Tests
-	func test_InputTextFieldExists_Success() {
-		let inputTextField = application.textFields[Identifiers.inputTextField.rawValue]
+	func test_InputTextViewExists_Success() {
+		let inputTextView = application.textViews[Identifiers.inputTextView.rawValue]
 		
-		XCTAssertTrue(inputTextField.exists, "The input text field doesn't exist")
+		XCTAssertTrue(inputTextView.exists, "The input text view doesn't exist")
 	}
 
 }

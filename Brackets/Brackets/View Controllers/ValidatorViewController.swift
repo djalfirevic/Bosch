@@ -11,9 +11,9 @@ import UIKit
 class ValidatorViewController: UIViewController {
 
 	// MARK: - Properties
-	@IBOutlet private weak var inputTextField: UITextField! {
+	@IBOutlet private weak var inputTextView: UITextView! {
 		didSet {
-			inputTextField.accessibilityIdentifier = Identifiers.inputTextField.rawValue
+			inputTextView.accessibilityIdentifier = Identifiers.inputTextView.rawValue
 		}
 	}
 	@IBOutlet private weak var resultImageView: UIImageView!
@@ -26,7 +26,7 @@ class ValidatorViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		inputTextField.becomeFirstResponder()
+		inputTextView.becomeFirstResponder()
 	}
 
 	// MARK: - UI Responder
@@ -37,7 +37,7 @@ class ValidatorViewController: UIViewController {
 	
 	// MARK: - Actions
 	@IBAction private func onValidate() {
-		guard validate(), let sequence = inputTextField.text else {
+		guard validate(), let sequence = inputTextView.text else {
 			showAlert(title: Messages.error.rawValue, message: Messages.pleaseEnterSequence.rawValue)
 			return
 		}
@@ -47,13 +47,13 @@ class ValidatorViewController: UIViewController {
 	}
 	
 	@IBAction private func onMeasure() {
-		guard validate(), let sequence = inputTextField.text else {
+		guard validate(), let sequence = inputTextView.text else {
 			showAlert(title: Messages.error.rawValue, message: Messages.pleaseEnterSequence.rawValue)
 			return
 		}
 		
 		let measurement = Benchmark.measureBlockByCFTimeInterval {
-			validator.validate(sequence)
+			validator.validate(sequence) { success in }
 		}
 		
 		Logger.log(message: "Measurement: \(measurement.formattedTime)", type: .info)
@@ -62,9 +62,9 @@ class ValidatorViewController: UIViewController {
 	
 	// MARK: - Private API
 	private func presentResultForSequence(_ sequence: String) {
-		let validated = validator.validate(sequence)
-		
-		resultImageView.image = validated ? successImage : failureImage
+		validator.validate(sequence) { [weak self] success in
+			self?.resultImageView.image = success ? self?.successImage : self?.failureImage
+		}
 	}
 	
 	private func reset() {
@@ -73,22 +73,9 @@ class ValidatorViewController: UIViewController {
 	}
 	
 	private func validate() -> Bool {
-		guard let sequence = inputTextField.text, sequence.count > 0 else { return false }
+		guard let sequence = inputTextView.text, sequence.count > 0 else { return false }
 		
 		return true
 	}
 
 }
-
-extension ValidatorViewController: UITextFieldDelegate {
-	
-	// MARK: - UITextFieldDelegate
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		reset()
-		
-		return true
-	}
-	
-}
-

@@ -15,9 +15,21 @@ final class Validator {
 		return isSequenceBalanced(Array(sequence))
 	}
 	
+	func validate(_ sequence: String, completion: @escaping (Bool) -> Void) {
+		DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
+			let result = self.isSequenceBalanced(Array(sequence))
+			
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
+	}
+	
 	// MARK: - Private API
 	private func isSequenceBalanced(_ sequence: [Character]) -> Bool {
 		var stack = [Character]()
+		
+		// {filip ()}
 		
 		for bracket in sequence {
 			switch bracket {
@@ -31,14 +43,8 @@ final class Validator {
 					return false
 				}
 				stack.removeLast()
-			case "|":
-				if let index = stack.firstIndex(of: "|") {
-					stack.remove(at: index)
-				} else {
-					stack.append(bracket)
-				}
 			default:
-				return false
+				continue
 			}
 		}
 		

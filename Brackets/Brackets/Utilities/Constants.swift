@@ -14,5 +14,5 @@ public enum Messages: String {
 }
 
 public enum Identifiers: String {
-	case inputTextField = "textField--inputTextField"
+	case inputTextView = "textView--inputTextView"
 }

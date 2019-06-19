@@ -70,4 +70,26 @@ class BracketsTests: XCTestCase {
 		XCTAssertTrue(result, "Validation failed!")
 	}
 	
+	func test_CustomCharacters_Success() {
+		// Arrange
+		let sequence = "{djuro()|}"
+		
+		// Act
+		let result = validator.validate(sequence)
+		
+		// Assert
+		XCTAssertTrue(result, "Validation failed!")
+	}
+	
+	func test_SpacesIncluded_Success() {
+		// Arrange
+		let sequence = "{ | [ ] | ( ) }"
+		
+		// Act
+		let result = validator.validate(sequence)
+		
+		// Assert
+		XCTAssertTrue(result, "Validation failed!")
+	}
+	
 }
