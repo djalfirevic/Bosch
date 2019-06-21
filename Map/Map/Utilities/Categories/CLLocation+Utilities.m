@@ -17,7 +17,7 @@
 		return @"0 km/h";
 	}
 	
-	return [NSString stringWithFormat:@"%.2f km/h", self.speed / 3.6];
+	return [NSString stringWithFormat:@"%.2f km/h", self.speed * 3.6];
 }
 	
 @end
