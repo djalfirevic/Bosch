@@ -49,9 +49,9 @@
 		Car *car = (Car *)self.annotation;
 		
 		if (car.rotationType == kRoll) {
-			[self applyRotationTransformationForRow:roll andPitch:pitch];
+			self.imageView.layer.transform = CATransform3DMakeRotation([self degrees:roll], 1.0, 0.0, 0.0);
 		} else {
-			[self apply3DRotationTransformationForRoll:roll andPitch:pitch];
+			self.imageView.layer.transform = CATransform3DMakeRotation([self degrees:pitch], 0.0, 1.0, 0.0);
 		}
 	}
 }
@@ -60,14 +60,6 @@
 
 - (double)degrees:(double)radians {
 	return 180 / M_PI * radians;
-}
-
-- (void)applyRotationTransformationForRow:(double)roll andPitch:(double)pitch {
-	self.imageView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, (CGFloat)roll);
-}
-
-- (void)apply3DRotationTransformationForRoll:(double)roll andPitch:(double)pitch {
-	self.imageView.layer.transform = CATransform3DMakeRotation([self degrees:MAX(pitch, roll)], pitch, roll, 0.0);
 }
 	
 @end
